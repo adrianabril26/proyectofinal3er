@@ -1,0 +1,5 @@
+1|camisa blanca|4000|ropa casual
+2|tenis|50000|deportes
+3|calcetines|200|hombre
+4|camiseta de Vestir|450|Mujer
+5|chamarra|5000|deportivo
