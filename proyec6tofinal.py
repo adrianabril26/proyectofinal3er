@@ -211,10 +211,85 @@ def abrir_registro_ventas():
 
 
 def abrir_reportes():
-   messagebox.showinfo("Reportes", "Aquí irá el módulo de reportes.")
+    ventana = tk.Toplevel()
+    ventana.title("Reporte de Ventas")
+    ventana.geometry("700x400")
+    ventana.configure(bg="#f2f2f2")
+
+    titulo = tk.Label(
+        ventana,
+        text="Reporte de Ventas Realizadas",
+        font=("Arial", 16, "bold"),
+        bg="#f2f2f2"
+    )
+    titulo.pack(pady=10)
+
+    frame_tabla = tk.Frame(ventana)
+    frame_tabla.pack(pady=10)
+
+    columnas = ("producto", "precio", "cantidad", "total")
+    tabla = ttk.Treeview(frame_tabla, columns=columnas, show="headings", height=15)
+
+    tabla.heading("producto", text="Producto")
+    tabla.heading("precio", text="Precio")
+    tabla.heading("cantidad", text="Cantidad")
+    tabla.heading("total", text="Total")
+
+    tabla.column("producto", width=250, anchor="center")
+    tabla.column("precio", width=100, anchor="center")
+    tabla.column("cantidad", width=100, anchor="center")
+    tabla.column("total", width=120, anchor="center")
+
+    tabla.pack()
+
+    # --- Leer archivo ventas.txt ---
+    try:
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        ruta_archivo = os.path.join(BASE_DIR, "ventas.txt")
+
+        total_ventas = 0  # Acumular total de ventas
+
+        with open(ruta_archivo, "r", encoding="utf-8") as archivo:
+            for linea in archivo:
+                if linea.strip():
+                    datos = linea.strip().split("|")
+                    if len(datos) == 4:
+                        tabla.insert("", tk.END, values=datos)
+                        try:
+                            total_ventas += float(datos[3].strip())
+                        except:
+                            pass
+
+    except FileNotFoundError:
+        messagebox.showerror("Error", "El archivo ventas.txt no existe.")
+        ventana.destroy()
+        return
+
+    # Mostrar total de ventas
+    lbl_total = tk.Label(
+        ventana,
+        text=f"TOTAL DE VENTAS: ${total_ventas:.2f}",
+        font=("Arial", 14, "bold"),
+        bg="#f2f2f2",
+        fg="green"
+    )
+    lbl_total.pack(pady=10)
+
 
 def abrir_acerca_de():
-   messagebox.showinfo("Acerca de", "Punto de Venta de Ropa\nProyecto Escolar\nVersión 1.0")
+  acerca = tk.Toplevel()
+  acerca.title("Acerca de")
+  acerca.geometry("250x200")
+  acerca.resizable(False, False)
+
+  lbl_id = tk.Label(acerca, text="Software Ventas 2025", font=("Arial", 14))
+  lbl_id.pack(pady=5)
+
+  lbl_creado = tk.Label(acerca, text="Creado por Adrian Martinez Y Abril Lozano", font=("arial",12))
+  lbl_creado.pack(pady=5)
+  
+  lbl_grupo = tk.Label(acerca,text="grupo: 3A Prog Vesp", font=("arial",12))
+  lbl_grupo.pack(pady=5)
    
 
 # -------------------------
